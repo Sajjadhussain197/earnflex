@@ -22,7 +22,6 @@ const UserOnMap = () => {
   const cities = ['Leeds', 'Bristol', 'Bath', 'Liverpool', 'Manchester', 'Birmingham', 'London'];
 
   useEffect(() => {
-    import('leaflet/dist/leaflet.css');
     const fetchEmployees = async () => {
       const response = await fetch('https://api.findofficers.com/hiring_test/get_all_employee', {
         method: 'POST',
