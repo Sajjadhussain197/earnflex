@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from 'react';
 import { activationCode } from '@/lib/constants';
 import { Search } from 'lucide-react';
 import { Employee } from '@/lib/types';
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+delete (L.Icon.Default.prototype as { _getIconUrl?: () => string })._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -15,12 +15,10 @@ L.Icon.Default.mergeOptions({
 
 const UserOnMap = () => {
   const [employees, setEmployees] = useState<Employee[]>([]); 
-  const [searchTerm, setSearchTerm] = useState(''); // State for search term
-  const [mapType, setMapType] = useState('map'); // State for map type
-  const searchInputRef = useRef<HTMLInputElement>(null); // Create a ref for the search input
-  const [selectedCity, setSelectedCity] = useState<string | null>(null); // State for selected city
-
-  // List of cities
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [mapType, setMapType] = useState('map'); 
+  const searchInputRef = useRef<HTMLInputElement>(null); 
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const cities = ['Leeds', 'Bristol', 'Bath', 'Liverpool', 'Manchester', 'Birmingham', 'London'];
 
   useEffect(() => {
@@ -39,26 +37,22 @@ const UserOnMap = () => {
 
     fetchEmployees(); 
 
-    // Cleanup function to prevent map initialization error
     return () => {
-      setEmployees([]); // Clear employees on unmount
-      setSelectedCity(null); // Reset selected city
-      setSearchTerm(''); // Clear search term
-      setMapType('map'); // Reset map type
+      setEmployees([]);
+      setSelectedCity(null); 
+      setSearchTerm(''); 
+      setMapType('map'); 
     };
   }, []);
 
-  // Function to handle search
+ 
   let filteredEmployees = employees.filter(employee => 
     `${employee.firstName} ${employee.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Function to handle city selection
   const handleCityClick = (city: string) => {
     setSelectedCity(city);
   };
-
-  // Filter employees based on selected city
    filteredEmployees = employees.filter(employee => {
     const fullName = `${employee.firstName} ${employee.lastName}`.toLowerCase();
     const isCityMatch = selectedCity ? employee.city.toLowerCase() === selectedCity.toLowerCase() : true;

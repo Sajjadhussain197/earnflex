@@ -1,5 +1,4 @@
-export 
-interface Employee {
+export interface Employee {
   Hiring_TestID: number
   city: string
   country: string
