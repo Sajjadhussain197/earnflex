@@ -409,7 +409,7 @@ export default function UserListTable() {
             <div className="grid grid-cols-[2fr_repeat(6,1fr)] items-center p-2">
               <div className="flex items-center justify-start  gap-3 overflow-hidden ">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={user.profilePicture} alt={user.firstName} />
+                  <AvatarImage src={user.profilePicture || ''} alt={user.firstName} />
                   <AvatarFallback>{user.firstName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="space-y-1">
@@ -439,7 +439,7 @@ export default function UserListTable() {
                     <svg
                       key={index}
                       className={`h-5 w-5 ${
-                        index < user.rating ? "text-yellow-400" : "text-gray-300"
+                        "text-yellow-400" 
                       }`}
                       fill="currentColor"
                       viewBox="0 0 20 20"
