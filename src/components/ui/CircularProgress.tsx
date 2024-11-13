@@ -13,7 +13,7 @@ export default function ProgressCircle({ value = 56 }: { value?: number }) {
   return (
     
     <ChartContainer className="h-14 w-14" config={{ /* your config here */ }}>
-      <>
+
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -32,10 +32,8 @@ export default function ProgressCircle({ value = 56 }: { value?: number }) {
             </Pie>
           </PieChart>
         </ResponsiveContainer>
-        <div className="absolute inset-0 flex items-center justify-center">
-          {/* <span className="text-2xl font-bold">{value}%</span> */}
-        </div>
-      </>
+       
+      
     </ChartContainer>
   )
 }
