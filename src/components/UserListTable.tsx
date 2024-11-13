@@ -79,7 +79,7 @@ export default function UserListTable() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await fetch('https://api.findofficers.com/hiring_test/get_all_employee', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/get_all_employee`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ export default function UserListTable() {
     console.log(apiData)
     
     try {
-      const response = await fetch('https://api.findofficers.com/hiring_test/add_employee', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/add_employee`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

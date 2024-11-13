@@ -20,14 +20,26 @@ const UserOnMap = () => {
   const cities = ['Leeds', 'Bristol', 'Bath', 'Liverpool', 'Manchester', 'Birmingham', 'London'];
   const mapRef = useRef<L.Map | null>(null);
   const [L, setL] = useState<typeof import('leaflet') | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      const response = await fetch('https://api.findofficers.com/hiring_test/get_all_employee', {
+      const apiUrl = process.env.NEXT_PUBLIC_URL;
+      if (!apiUrl) {
+        console.error("API URL is not defined in the environment variables.");
+        return;
+      }
+
+      const response = await fetch(`${apiUrl}/get_all_employee`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(activationCode),
       });
+
       const data: Employee[] = await response.json();
       setEmployees(data);
     };
@@ -43,14 +55,15 @@ const UserOnMap = () => {
   }, []);
 
   useEffect(() => {
-    // Import leaflet only on the client side
-    import('leaflet').then((leaflet) => {
-      setL(leaflet);
-    });
-  }, []);
+    if (isMounted) {
+      import('leaflet').then((leaflet) => {
+        setL(leaflet);
+      });
+    }
+  }, [isMounted]);
 
   useEffect(() => {
-    if (L && typeof window !== 'undefined') {
+    if (L && isMounted) {
       delete (L.Icon.Default.prototype as { _getIconUrl?: () => string })._getIconUrl;
       L.Icon.Default.mergeOptions({
         iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
@@ -58,7 +71,7 @@ const UserOnMap = () => {
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
       });
     }
-  }, [L]);
+  }, [L, isMounted]);
 
   let filteredEmployees = employees.filter(employee => 
     `${employee.firstName} ${employee.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
@@ -72,7 +85,7 @@ const UserOnMap = () => {
     return isCityMatch && fullName.includes(searchTerm.toLowerCase());
   });
 
-  if (typeof window === 'undefined') return null;
+  if (!isMounted) return null;
 
   return (
     <div className='p-5 flex flex-col gap-3'>
